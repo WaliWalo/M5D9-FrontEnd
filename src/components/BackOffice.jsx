@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { Button, Container, Image, Spinner, Table } from "react-bootstrap";
-import { getProducts, postProductImage } from "../api/productsApi";
+import {
+  downloadList,
+  getProductPdf,
+  getProducts,
+  postProductImage,
+} from "../api/productsApi";
 import AddProductForm from "./AddProductForm";
 import { postProduct, removeProduct } from "../api/productsApi";
 const BackOffice = (props) => {
@@ -70,6 +75,17 @@ const BackOffice = (props) => {
     setSubmittedSize(submittedSize + 1);
   };
 
+  const downloadProduct = async (e) => {
+    let id = e.target.id;
+    console.log(e.currentTarget);
+    const pdf = await getProductPdf(id);
+    window.open(pdf.file);
+  };
+
+  const downloadProductList = async () => {
+    await downloadList();
+  };
+
   const updateProduct = async (e, product) => {
     setProduct(product);
     setUpdate(product);
@@ -136,11 +152,19 @@ const BackOffice = (props) => {
                               Update
                             </Button>
                             <Button
+                              className="mr-2"
                               id={product._id}
                               onClick={(e) => deleteProduct(e)}
                               variant="danger"
                             >
                               Remove
+                            </Button>
+                            <Button
+                              id={product._id}
+                              onClick={(e) => downloadProduct(e)}
+                              variant="success"
+                            >
+                              DOWNLOAD
                             </Button>
                           </td>
                         </tr>
@@ -150,6 +174,7 @@ const BackOffice = (props) => {
               )}
             </tbody>
           </Table>
+          <Button onClick={() => downloadProductList()}>DOWNLOAD LIST</Button>
         </Container>
       </div>
     </div>

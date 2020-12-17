@@ -259,3 +259,47 @@ export async function removeItemFromBasket(cartId, productId) {
     return error;
   }
 }
+
+//GET PRODUCT PDF
+export async function getProductPdf(id) {
+  try {
+    let response = await fetch(
+      `http://localhost:3001/products/${id}/exportPdf`,
+      { method: "GET" }
+    );
+    const file = { file: `http://localhost:3001/products/${id}/exportPdf` };
+
+    if (response.ok) {
+      alert("SUCCESS! SENT TO YOUR EMAIL!");
+      // window.open(file.file);
+      return file;
+    } else {
+      alert("SOMETHING WENT WRONG");
+      const error = response.json();
+      return error;
+    }
+  } catch (error) {
+    return error;
+  }
+}
+
+export async function downloadList() {
+  try {
+    let response = await fetch(
+      `http://localhost:3001/products/csv/exportToCSV`,
+      { method: "GET" }
+    );
+    const file = { file: `http://localhost:3001/products/csv/exportToCSV` };
+
+    if (response.ok) {
+      // alert("SUCCESS!");
+      window.open(file.file);
+    } else {
+      alert("SOMETHING WENT WRONG");
+      const error = response.json();
+      return error;
+    }
+  } catch (error) {
+    return error;
+  }
+}
